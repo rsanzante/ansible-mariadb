@@ -81,7 +81,7 @@
     - localhost
 
 - name: setting mariadb configuration
-  template: src=my.cnf.j2 dest="{{mariadb_configuration}}" owner=root group=root mode=0640 backup=yes
+  template: src=my.cnf.j2 dest="{{mariadb_configuration}}" owner=root group=mysql mode=0640 backup=yes
   notify: restart mariadb
 
 - name: copy .my.cnf file with root password credentials
