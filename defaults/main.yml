@@ -28,7 +28,8 @@ mariadb_gid:
 
 # MariaDB Configuration
 mariadb_configuration: /etc/mysql/my.cnf
-mariadb_includedir: /etc/mysql/conf.d/
+mariadb_general_includedir: /etc/mysql/conf.d/
+mariadb_specific_includedir: /etc/mysql/mariadb.conf.d/
 
 # Configuration vars
 mariadb_datadir: /var/lib/mysql
