@@ -10,9 +10,9 @@
 
 # reseting permissions
 - name: reset mariadb data folder and subfolder to new uid
-  shell: 'find {{item}} -user mysql -exec chown {{mariadb_uid}}:{{mariadb_gid}} {} \;'
+  shell: 'find {{item}} -user mysql -exec chown {{ mariadb_uid }}:{{ mariadb_gid }} {} \;'
   with_items:
-    - "{{mariadb_datadir}}"
+    - "{{ mariadb_datadir }}"
     - /run/mysqld
     - /var/run/mysqld
   when: mariadb_uid or mariadb_gid
@@ -20,15 +20,15 @@
 
 - name: reset mariadb log folder and subfolder to new uid
   file: path=/var/log/mysql owner={{mariadb_uid}} group=adm recurse=yes state=directory
-  when: mariadb_uid
+  when: mariadb_uid|bool
 
 - name: set mariadb user uid
   user: name=mysql uid={{ mariadb_uid }} state=present
-  when: mariadb_uid
+  when: mariadb_uid|bool
 
 - name: set mariadb user gid
   group: name=mysql gid={{ mariadb_gid }} state=present
-  when: mariadb_gid
+  when: mariadb_gid|bool
 
 - name: check datadir/mysql is present
   stat: path={{mariadb_datadir}}/mysql
@@ -40,7 +40,7 @@
   when: datadir_is_ok.stat.exists == False
 
 - name: start temporary mariadb
-  shell: "mysqld_safe --datadir={{mariadb_datadir}} --user=mysql & echo $!"
+  shell: "mysqld_safe --datadir={{ mariadb_datadir }} --user=mysql & echo $!"
   register: mariadb_temp_instance
   when: datadir_is_ok.stat.exists == False
 
