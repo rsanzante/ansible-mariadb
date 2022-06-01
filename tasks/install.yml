@@ -11,7 +11,7 @@
 
 - name: installing MariaDB packages
   apt:
-    name: ['{{ mariadb_package_client }}', '{{ mariadb_package_server }}', 'python-mysqldb']
+    name: ['{{ mariadb_package_client }}', '{{ mariadb_package_server }}', 'python{% if ansible_python_version is version("3", ">=") %}3{% endif %}-mysqldb']
     state: present
     update_cache: yes
   notify: stop mariadb
