@@ -56,8 +56,14 @@
 
 # reset debian-sys-maint user password
 - name: set debian-sys-maint user account
-  mysql_user: name='debian-sys-maint' password={{mariadb_debsysmaint_password}} priv=*.*:ALL state=present
+  mysql_user:
+    name: debian-sys-maint
+    password: "{{ mariadb_debsysmaint_password }}"
+    priv: "*.*:ALL"
+    state: present
+    login_unix_socket: /var/run/mysqld/mysqld.sock
   when: mariadb_debsysmaint_password is defined and mariadb_debsysmaint_password
+
 
 - name: set debian-sys-maint configuration file
   template: src=debian.cnf.j2 dest=/etc/mysql/debian.cnf owner=root group=root mode=0600 backup=yes
@@ -74,11 +80,16 @@
 - meta: flush_handlers
 
 - name: update mariadb root password for all root accounts
-  mysql_user: name="root" host="{{ item }}" password="{{ mariadb_root_password }}"
+  mysql_user:
+    name: "root"
+    host: "{{ item }}"
+    password: "{{ mariadb_root_password }}"
+    login_unix_socket: /var/run/mysqld/mysqld.sock
   with_items:
     - 127.0.0.1
     - ::1
     - localhost
+
 
 - name: setting mariadb configuration
   template: src=my.cnf.j2 dest="{{mariadb_configuration}}" owner=root group=mysql mode=0640 backup=yes
@@ -89,10 +100,16 @@
 
 # clean default unsecure data
 - name: remove anonymous mariadb user
-  mysql_user: "name='' state=absent"
+  mysql_user:
+    name: ''
+    state: absent
+    login_unix_socket: /var/run/mysqld/mysqld.sock
 
 - name: remove mariadb test database
-  mysql_db: "name='test' state=absent"
+  mysql_db:
+    name: test
+    state: absent
+    login_unix_socket: /var/run/mysqld/mysqld.sock
 
 - name: ensure mariadb is started and enabled on boot
   service: name={{mariadb_service_name}} state=started enabled=yes
