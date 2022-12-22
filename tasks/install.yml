@@ -10,14 +10,14 @@
   when: mariadb_set_repository
 
 - name: installing MariaDB packages
-  apt:
+  ansible.builtin.apt:
     name: ['{{ mariadb_package_client }}', '{{ mariadb_package_server }}', 'python{% if ansible_python_version is version("3", ">=") %}3{% endif %}-mysqldb']
     state: present
     update_cache: yes
   notify: stop mariadb
 
 - name: installing MariaDB tools
-  apt:
+  ansible.builtin.apt:
     name: ['mysqltuner', 'percona-toolkit']
     state: present
     update_cache: yes

@@ -6,7 +6,7 @@
 
 # be sure all folders exists before resting permissions
 - name: ensure /run/mysqld folder exists
-  file: path=/run/mysqld owner=mysql group=mysql mode=0755 state=directory
+  ansible.builtin.file: path=/run/mysqld owner=mysql group=mysql mode=0755 state=directory
 
 # reseting permissions
 - name: reset mariadb data folder and subfolder to new uid
@@ -19,7 +19,7 @@
   changed_when: false
 
 - name: reset mariadb log folder and subfolder to new uid
-  file: path=/var/log/mysql owner={{mariadb_uid}} group=adm recurse=yes state=directory
+  ansible.builtin.file: path=/var/log/mysql owner={{mariadb_uid}} group=adm recurse=yes state=directory
   when: mariadb_uid|bool
 
 - name: set mariadb user uid
@@ -45,7 +45,7 @@
   when: datadir_is_ok.stat.exists == False
 
 - name: set .my.cnf root blank password for temporary mariadb
-  lineinfile: dest=/root/.my.cnf regexp='^password=' line='password=' owner=root group=root mode=0600
+  ansible.builtin.lineinfile: dest=/root/.my.cnf regexp='^password=' line='password=' owner=root group=root mode=0600
   when: datadir_is_ok.stat.exists == False
 
 - name: start mariadb
