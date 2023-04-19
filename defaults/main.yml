@@ -86,6 +86,8 @@ mariadb_default_config:
       - log_bin = /var/log/mysql/mysql-bin.log
       - expire_logs_days = 10
       - max_binlog_size = 100M
+      - "# Default recommended configuration for Drupal, see https://www.drupal.org/docs/getting-started/system-requirements/setting-the-mysql-transaction-isolation-level"
+      - transaction_isolation = READ-COMMITTED
   - name: 'mysqldump'
     config:
       - quick
