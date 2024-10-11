@@ -3,7 +3,7 @@
 # MariaDB repository
 mariadb_set_repository: True
 mariadb_version: 10.4
-mariadb_repo: 'deb https://ftp.harukasan.org/mariadb/repo/{{mariadb_version}}/debian {{ansible_distribution_release}} main'
+mariadb_repo: "deb https://deb.mariadb.org/{{ mariadb_version }}/debian {{ansible_distribution_release}} main"
 mariadb_repo_key_url: https://mariadb.org/mariadb_release_signing_key.asc
 
 # MariaDB Packages
